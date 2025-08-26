@@ -156,7 +156,10 @@ const handleSendMessage = () => {
 }
 
 const handleReply = (event) => {
+  console.log('ChatScreen: handleReply called with event:', event)
+  console.log('ChatScreen: Setting replyingTo to:', event.message)
   replyingTo.value = event.message
+  console.log('ChatScreen: replyingTo is now:', replyingTo.value)
 }
 
 const cancelReply = () => {

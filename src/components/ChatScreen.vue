@@ -52,6 +52,7 @@
           :current-username="currentUsername"
           @add-reaction="$emit('add-reaction', $event)"
           @edit-message="$emit('edit-message', $event)"
+          @reply-to-message="handleReply"
         />
       </div>
     </div>
@@ -147,6 +148,10 @@ const handleSendMessage = () => {
   
   emit('send-message', messageData)
   messageText.value = ''
+}
+
+const handleReply = (event) => {
+  replyingTo.value = event.message
 }
 
 const cancelReply = () => {

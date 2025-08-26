@@ -105,10 +105,14 @@ function addReaction(emoji, messageId) {
     if (!messageId) {
         // Get the current reaction target
         const target = document.querySelector('.message[data-show-reactions="true"]');
-        if (!target) return;
+        if (!target) {
+            console.log('No target message found for reaction');
+            return;
+        }
         messageId = target.dataset.messageId;
     }
     
+    console.log('Adding reaction:', emoji, 'to message:', messageId);
     socket.emit('add_reaction', { messageId, emoji });
     hideAllReactionButtons();
 }
@@ -146,14 +150,19 @@ function hideAllReactionButtons() {
 function createReactionButtons() {
     const div = document.createElement('div');
     div.className = 'reaction-buttons';
-    div.innerHTML = `
-        <button onclick="addReaction('👍')">👍</button>
-        <button onclick="addReaction('❤️')">❤️</button>
-        <button onclick="addReaction('😂')">😂</button>
-        <button onclick="addReaction('😮')">😮</button>
-        <button onclick="addReaction('😢')">😢</button>
-        <button onclick="addReaction('😡')">😡</button>
-    `;
+    
+    const emojis = ['👍', '❤️', '😂', '😮', '😢', '😡'];
+    
+    emojis.forEach(emoji => {
+        const button = document.createElement('button');
+        button.textContent = emoji;
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            addReaction(emoji);
+        });
+        div.appendChild(button);
+    });
+    
     return div;
 }
 

@@ -250,14 +250,27 @@ io.on('connection', (socket) => {
     // Handle emoji reactions
     socket.on('add_reaction', (data) => {
         const userInfo = userSockets.get(socket.id);
-        if (!userInfo || !userInfo.roomId) return;
+        if (!userInfo || !userInfo.roomId) {
+            console.log('User not in room for reaction');
+            return;
+        }
         
         const { messageId, emoji } = data;
         const roomId = userInfo.roomId;
         
+        console.log(`Reaction from ${userInfo.username}: ${emoji} on message ${messageId}`);
+        
         // Validate emoji (basic check)
         const validEmojis = ['👍', '❤️', '😂', '😮', '😢', '😡'];
-        if (!validEmojis.includes(emoji)) return;
+        if (!validEmojis.includes(emoji)) {
+            console.log('Invalid emoji:', emoji);
+            return;
+        }
+        
+        if (!messageId) {
+            console.log('No message ID provided');
+            return;
+        }
         
         // Send reaction to room
         io.to(roomId).emit('message_reaction', {
@@ -265,6 +278,8 @@ io.on('connection', (socket) => {
             emoji,
             username: userInfo.username
         });
+        
+        console.log(`Sent reaction to room ${roomId}`);
     });
     
     // Handle finding new match

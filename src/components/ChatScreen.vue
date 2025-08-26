@@ -74,6 +74,11 @@
       </div>
     </div>
 
+    <!-- Debug: Show replyingTo state -->
+    <div v-if="replyingTo" class="bg-red-500 text-white p-2 text-center">
+      DEBUG: Reply Banner should show here. replyingTo: {{ JSON.stringify(replyingTo) }}
+    </div>
+    
     <!-- Reply Banner -->
     <ReplyBanner 
       v-if="replyingTo"

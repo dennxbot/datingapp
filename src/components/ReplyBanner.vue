@@ -1,17 +1,17 @@
 <template>
-  <div class="bg-purple-50 border border-purple-200 shadow-lg px-4 py-4 animate-in slide-in-from-bottom duration-200">
+  <div class="bg-purple-100 border-2 border-purple-300 shadow-xl px-4 py-4 transition-all duration-300 transform translate-y-0">
     <div class="max-w-4xl mx-auto">
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-3 flex-1 min-w-0">
           <!-- Reply Icon -->
-          <div class="text-purple-600 text-xl font-bold">↩️</div>
+          <div class="text-purple-600 text-2xl font-bold bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md">↩️</div>
           
           <!-- Reply Content -->
           <div class="flex-1 min-w-0">
-            <div class="text-sm font-semibold text-purple-700 mb-1">
-              Replying to {{ replyTo.username || replyTo.isOwn ? 'You' : replyTo.username }}
+            <div class="text-base font-bold text-purple-800 mb-2">
+              Replying to {{ replyTo.isOwn ? 'yourself' : (replyTo.username || 'User') }}
             </div>
-            <div class="text-sm text-gray-700 truncate bg-white/70 px-2 py-1 rounded border-l-4 border-purple-400">
+            <div class="text-sm text-gray-800 bg-white px-3 py-2 rounded-lg border-l-4 border-purple-500 shadow-sm">
               {{ replyTo.text }}
             </div>
           </div>
@@ -20,7 +20,7 @@
         <!-- Cancel Button -->
         <button
           @click="$emit('cancel')"
-          class="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 hover:bg-red-200 transition-colors duration-200 flex items-center justify-center text-red-600 hover:text-red-700 font-bold text-lg"
+          class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 transition-all duration-200 flex items-center justify-center text-white font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
           title="Cancel reply"
         >
           ✕

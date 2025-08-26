@@ -74,17 +74,34 @@
       </div>
     </div>
 
-    <!-- Debug: Show replyingTo state -->
-    <div v-if="replyingTo" class="bg-red-500 text-white p-2 text-center">
-      DEBUG: Reply Banner should show here. replyingTo: {{ JSON.stringify(replyingTo) }}
-    </div>
-    
     <!-- Reply Banner -->
-    <ReplyBanner 
+    <div 
       v-if="replyingTo"
-      :reply-to="replyingTo"
-      @cancel="cancelReply"
-    />
+      class="bg-purple-100 border-2 border-purple-300 shadow-xl px-4 py-4 transition-all duration-300"
+    >
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-3 flex-1 min-w-0">
+            <div class="text-purple-600 text-2xl font-bold bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-md">↩️</div>
+            <div class="flex-1 min-w-0">
+              <div class="text-base font-bold text-purple-800 mb-2">
+                Replying to {{ replyingTo.isOwn ? 'yourself' : (replyingTo.username || 'User') }}
+              </div>
+              <div class="text-sm text-gray-800 bg-white px-3 py-2 rounded-lg border-l-4 border-purple-500 shadow-sm">
+                {{ replyingTo.text }}
+              </div>
+            </div>
+          </div>
+          <button
+            @click="cancelReply"
+            class="flex-shrink-0 w-12 h-12 rounded-full bg-red-500 hover:bg-red-600 transition-all duration-200 flex items-center justify-center text-white font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105"
+            title="Cancel reply"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Message Input -->
     <div class="glass-effect border-t border-white/20 px-4 py-4">

@@ -19,14 +19,22 @@
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
-  "keywords": ["dating", "chat", "socket.io", "express", "real-time", "vue", "tailwind"],
+  "keywords": [
+    "dating",
+    "chat",
+    "socket.io",
+    "express",
+    "real-time",
+    "vue",
+    "tailwind"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
     "socket.io": "^4.8.1",
-    "vue": "^3.4.0",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "vue": "^3.4.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.5.0",
@@ -34,6 +42,6 @@
     "concurrently": "^8.2.2",
     "postcss": "^8.4.32",
     "tailwindcss": "^3.3.6",
-    "vite": "^5.0.0"
+    "vite": "^5.4.19"
   }
 }

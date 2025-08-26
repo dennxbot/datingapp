@@ -180,13 +180,10 @@ const handleReaction = (emoji) => {
 }
 
 const handleReply = () => {
-  console.log('MessageBubble: handleReply called')
-  console.log('MessageBubble: About to emit reply-to-message with:', props.message)
   emit('reply-to-message', {
     messageId: props.message.id,
     message: props.message
   })
-  console.log('MessageBubble: Event emitted, hiding context menu')
   hideContextMenu()
 }
 

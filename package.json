@@ -2,20 +2,35 @@
   "name": "dating-app",
   "version": "1.0.0",
   "main": "server.js",
-  "description": "A simple web-based dating app with real-time chat using Node.js, Express, and Socket.IO",
+  "description": "A simple web-based dating app with real-time chat using Vue.js, Tailwind CSS, Node.js, Express, and Socket.IO",
   "scripts": {
     "start": "node server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server.js",
+    "client": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
   },
-  "keywords": ["dating", "chat", "socket.io", "express", "real-time"],
+  "keywords": ["dating", "chat", "socket.io", "express", "real-time", "vue", "tailwind"],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.1",
+    "vue": "^3.4.0",
+    "socket.io-client": "^4.7.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.5.0",
+    "autoprefixer": "^10.4.16",
+    "concurrently": "^8.2.2",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.3.6",
+    "vite": "^5.0.0"
   }
 }

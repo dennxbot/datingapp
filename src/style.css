@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar styles */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  
+  .scrollbar-thumb-purple {
+    scrollbar-color: rgba(139, 92, 246, 0.3) transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.5);
+  }
+}
+
+/* Custom animations */
+@layer components {
+  .typing-dot {
+    @apply w-2 h-2 bg-gray-500 rounded-full animate-pulse;
+    animation-delay: 0ms;
+  }
+  
+  .typing-dot:nth-child(2) {
+    animation-delay: 150ms;
+  }
+  
+  .typing-dot:nth-child(3) {
+    animation-delay: 300ms;
+  }
+  
+  .message-enter {
+    @apply opacity-0 transform translate-y-4;
+    transition: all 0.3s ease-out;
+  }
+  
+  .message-enter-active {
+    @apply opacity-100 transform translate-y-0;
+  }
+  
+  .glass-effect {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .btn-gradient {
+    @apply bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5;
+  }
+  
+  .btn-secondary {
+    @apply bg-white/50 backdrop-blur-sm border border-white/20 text-gray-700 font-medium py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5;
+  }
+}

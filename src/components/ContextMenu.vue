@@ -29,7 +29,7 @@
         <!-- Actions -->
         <div class="py-1">
           <button
-            @click="$emit('reply')"
+            @click="() => { console.log('Reply button clicked'); $emit('reply') }"
             class="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-white/50 transition-colors duration-200 flex items-center"
           >
             <span class="mr-3">↩️</span>

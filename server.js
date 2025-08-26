@@ -209,7 +209,7 @@ io.on('connection', (socket) => {
             return;
         }
         
-        const { message } = data;
+        const { message, replyTo } = data;
         const roomId = userInfo.roomId;
         
         // Validate message
@@ -219,15 +219,23 @@ io.on('connection', (socket) => {
             return;
         }
         
-        // Send message to everyone in the room
-        io.to(roomId).emit('new_message', {
+        // Prepare message data
+        const messageData = {
             username: userInfo.username,
             message: message.trim(),
             timestamp: new Date().toISOString(),
             messageId: Date.now() + '_' + Math.random().toString(36).substr(2, 9)
-        });
+        };
         
-        console.log(`Message in room ${roomId} from ${userInfo.username}: ${message}`);
+        // Add reply information if this is a reply
+        if (replyTo) {
+            messageData.replyTo = replyTo;
+        }
+        
+        // Send message to everyone in the room
+        io.to(roomId).emit('new_message', messageData);
+        
+        console.log(`Message in room ${roomId} from ${userInfo.username}: ${message}${replyTo ? ' (reply)' : ''}`);
     });
     
     // Handle typing indicators
@@ -280,6 +288,46 @@ io.on('connection', (socket) => {
         });
         
         console.log(`Sent reaction to room ${roomId}`);
+    });
+    
+    // Handle message editing
+    socket.on('edit_message', (data) => {
+        const userInfo = userSockets.get(socket.id);
+        if (!userInfo || !userInfo.roomId) {
+            console.log('User not in room for message edit');
+            return;
+        }
+        
+        const { messageId, newText } = data;
+        const roomId = userInfo.roomId;
+        
+        // Validate new text
+        if (!newText || newText.trim().length === 0) {
+            socket.emit('message_error', { error: 'Message cannot be empty' });
+            return;
+        }
+        
+        if (newText.length > 500) {
+            socket.emit('message_error', { error: 'Message too long (max 500 characters)' });
+            return;
+        }
+        
+        if (!messageId) {
+            console.log('No message ID provided for edit');
+            return;
+        }
+        
+        console.log(`Edit request from ${userInfo.username}: message ${messageId} -> "${newText.trim()}"`);
+        
+        // Send edit notification to room
+        io.to(roomId).emit('message_edited', {
+            messageId,
+            newText: newText.trim(),
+            username: userInfo.username,
+            timestamp: new Date().toISOString()
+        });
+        
+        console.log(`Sent message edit to room ${roomId}`);
     });
     
     // Handle finding new match

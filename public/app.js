@@ -524,7 +524,7 @@ socket.on('matched', (data) => {
 socket.on('new_message', (data) => {
     console.log('New message:', data);
     const isOwn = data.username === currentUsername;
-    addMessage(data.username, data.message, data.timestamp, data.messageId, isOwn);
+    addMessage(data.username, data.message, data.timestamp, data.messageId, isOwn, data.replyTo);
 });
 
 socket.on('partner_left', () => {
@@ -586,6 +586,33 @@ socket.on('rate_limited', (data) => {
 
 socket.on('message_error', (data) => {
     alert(data.error);
+});
+
+socket.on('message_edited', (data) => {
+    console.log('Message edited:', data);
+    const messageElement = document.querySelector(`[data-message-id="${data.messageId}"]`);
+    if (!messageElement) return;
+    
+    const messageText = messageElement.querySelector('.message-text');
+    if (messageText) {
+        messageText.textContent = data.newText;
+        
+        // Add edited indicator if not already present
+        let editedIndicator = messageElement.querySelector('.edited-indicator');
+        if (!editedIndicator) {
+            editedIndicator = document.createElement('span');
+            editedIndicator.className = 'edited-indicator';
+            editedIndicator.textContent = ' (edited)';
+            editedIndicator.style.fontSize = '0.8em';
+            editedIndicator.style.color = '#888';
+            editedIndicator.style.fontStyle = 'italic';
+            
+            const messageMeta = messageElement.querySelector('.message-meta');
+            if (messageMeta) {
+                messageMeta.appendChild(editedIndicator);
+            }
+        }
+    }
 });
 
 // Form event listeners

@@ -1,14 +1,25 @@
-const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
-const path = require('path');
+import express from 'express';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
+const server = createServer(app);
+const io = new Server(server);
 
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files based on environment
+if (process.env.NODE_ENV === 'production') {
+    // In production, serve built Vue.js app
+    app.use(express.static(join(__dirname, 'dist')));
+} else {
+    // In development, let Vite handle the frontend
+    // This server only handles API and Socket.IO
+    console.log('Running in development mode - Vite will handle frontend on port 5173');
+}
 
 // Data structures for managing users and matches
 const waitingQueue = [];

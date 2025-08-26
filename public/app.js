@@ -171,7 +171,9 @@ function createReactionButtons() {
 
 // Context Menu Functions
 function showContextMenu(x, y, messageElement) {
+    console.log('showContextMenu called at position:', x, y, 'for message:', messageElement.dataset.messageId);
     const contextMenu = document.getElementById('message-context-menu');
+    console.log('Context menu element found:', !!contextMenu);
     const isOwn = messageElement.classList.contains('own');
     
     contextMenuTarget = messageElement;
@@ -402,31 +404,89 @@ function addMessage(username, message, timestamp, messageId, isOwn = false, repl
     // Add context menu handlers
     let pressTimer;
     let startX, startY;
+    let isLongPress = false;
     
+    // Mouse events for desktop
     messageDiv.addEventListener('mousedown', (e) => {
+        console.log('Mouse down on message:', messageDiv.dataset.messageId);
+        // Ignore right clicks as they trigger contextmenu event
+        if (e.button !== 0) return;
+        
         startX = e.clientX;
         startY = e.clientY;
+        isLongPress = false;
         
         pressTimer = setTimeout(() => {
+            isLongPress = true;
+            console.log('Long-press detected (mouse) for message:', messageDiv.dataset.messageId);
             showContextMenu(e.clientX, e.clientY, messageDiv);
         }, 500);
     });
     
     messageDiv.addEventListener('mousemove', (e) => {
+        if (!pressTimer) return;
+        
         const distance = Math.sqrt(
             Math.pow(e.clientX - startX, 2) + Math.pow(e.clientY - startY, 2)
         );
         
-        if (distance > 10 && pressTimer) {
+        if (distance > 10) {
             clearTimeout(pressTimer);
             pressTimer = null;
         }
     });
     
-    messageDiv.addEventListener('mouseup', () => {
+    messageDiv.addEventListener('mouseup', (e) => {
         if (pressTimer) {
             clearTimeout(pressTimer);
             pressTimer = null;
+        }
+        
+        // Prevent click events if it was a long press
+        if (isLongPress) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+    });
+    
+    // Touch events for mobile
+    messageDiv.addEventListener('touchstart', (e) => {
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        isLongPress = false;
+        
+        pressTimer = setTimeout(() => {
+            isLongPress = true;
+            console.log('Long-press detected (touch) for message:', messageDiv.dataset.messageId);
+            showContextMenu(touch.clientX, touch.clientY, messageDiv);
+        }, 500);
+    });
+    
+    messageDiv.addEventListener('touchmove', (e) => {
+        if (!pressTimer) return;
+        
+        const touch = e.touches[0];
+        const distance = Math.sqrt(
+            Math.pow(touch.clientX - startX, 2) + Math.pow(touch.clientY - startY, 2)
+        );
+        
+        if (distance > 10) {
+            clearTimeout(pressTimer);
+            pressTimer = null;
+        }
+    });
+    
+    messageDiv.addEventListener('touchend', (e) => {
+        if (pressTimer) {
+            clearTimeout(pressTimer);
+            pressTimer = null;
+        }
+        
+        // Prevent click events if it was a long press
+        if (isLongPress) {
+            e.preventDefault();
+            e.stopPropagation();
         }
     });
     

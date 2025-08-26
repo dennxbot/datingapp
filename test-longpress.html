@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Long Press Test</title>
+    <style>
+        .test-message {
+            background: #e3f2fd;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        .context-menu {
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 5px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            min-width: 120px;
+        }
+        
+        .context-menu button {
+            display: block;
+            width: 100%;
+            padding: 8px 12px;
+            border: none;
+            background: none;
+            text-align: left;
+            cursor: pointer;
+        }
+        
+        .context-menu button:hover {
+            background: #f0f0f0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Long Press Test</h1>
+    <p>Try long-pressing (holding for 500ms) on the message below:</p>
+    
+    <div class="test-message" data-message-id="test-123">
+        Test message - long press me!
+    </div>
+    
+    <div id="context-menu" class="context-menu hidden">
+        <button onclick="alert('Reply clicked!')">Reply</button>
+        <button onclick="alert('Edit clicked!')">Edit</button>
+        <button onclick="alert('Copy clicked!')">Copy</button>
+    </div>
+    
+    <div id="debug-log" style="margin-top: 20px; padding: 10px; background: #f5f5f5; border-radius: 5px;">
+        <h3>Debug Log:</h3>
+        <div id="log-content"></div>
+    </div>
+
+    <script>
+        function log(message) {
+            const logContent = document.getElementById('log-content');
+            const timestamp = new Date().toLocaleTimeString();
+            logContent.innerHTML += `<div>${timestamp}: ${message}</div>`;
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+        
+        function showContextMenu(x, y) {
+            log(`Showing context menu at ${x}, ${y}`);
+            const contextMenu = document.getElementById('context-menu');
+            contextMenu.style.left = x + 'px';
+            contextMenu.style.top = y + 'px';
+            contextMenu.classList.remove('hidden');
+        }
+        
+        function hideContextMenu() {
+            const contextMenu = document.getElementById('context-menu');
+            contextMenu.classList.add('hidden');
+        }
+        
+        // Set up long press detection
+        const messageDiv = document.querySelector('.test-message');
+        let pressTimer;
+        let startX, startY;
+        let isLongPress = false;
+        
+        // Mouse events
+        messageDiv.addEventListener('mousedown', (e) => {
+            log('Mouse down detected');
+            if (e.button !== 0) return; // Only left click
+            
+            startX = e.clientX;
+            startY = e.clientY;
+            isLongPress = false;
+            
+            pressTimer = setTimeout(() => {
+                isLongPress = true;
+                log('Long press detected (mouse)');
+                showContextMenu(e.clientX, e.clientY);
+            }, 500);
+        });
+        
+        messageDiv.addEventListener('mousemove', (e) => {
+            if (!pressTimer) return;
+            
+            const distance = Math.sqrt(
+                Math.pow(e.clientX - startX, 2) + Math.pow(e.clientY - startY, 2)
+            );
+            
+            if (distance > 10) {
+                log('Movement detected, canceling long press');
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+        });
+        
+        messageDiv.addEventListener('mouseup', (e) => {
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+                log('Mouse up - timer cleared');
+            }
+            
+            if (isLongPress) {
+                e.preventDefault();
+                e.stopPropagation();
+                log('Prevented click after long press');
+            }
+        });
+        
+        // Touch events
+        messageDiv.addEventListener('touchstart', (e) => {
+            log('Touch start detected');
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            isLongPress = false;
+            
+            pressTimer = setTimeout(() => {
+                isLongPress = true;
+                log('Long press detected (touch)');
+                showContextMenu(touch.clientX, touch.clientY);
+            }, 500);
+        });
+        
+        messageDiv.addEventListener('touchmove', (e) => {
+            if (!pressTimer) return;
+            
+            const touch = e.touches[0];
+            const distance = Math.sqrt(
+                Math.pow(touch.clientX - startX, 2) + Math.pow(touch.clientY - startY, 2)
+            );
+            
+            if (distance > 10) {
+                log('Touch movement detected, canceling long press');
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+        });
+        
+        messageDiv.addEventListener('touchend', (e) => {
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+                log('Touch end - timer cleared');
+            }
+            
+            if (isLongPress) {
+                e.preventDefault();
+                e.stopPropagation();
+                log('Prevented click after long press');
+            }
+        });
+        
+        // Context menu (right click)
+        messageDiv.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            log('Context menu (right click) detected');
+            showContextMenu(e.clientX, e.clientY);
+        });
+        
+        // Hide context menu when clicking elsewhere
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#context-menu')) {
+                hideContextMenu();
+            }
+        });
+        
+        log('Test page loaded - try long pressing the message!');
+    </script>
+</body>
+</html>

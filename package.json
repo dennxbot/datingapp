@@ -1,0 +1,21 @@
+{
+  "name": "dating-app",
+  "version": "1.0.0",
+  "main": "server.js",
+  "description": "A simple web-based dating app with real-time chat using Node.js, Express, and Socket.IO",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "keywords": ["dating", "chat", "socket.io", "express", "real-time"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}

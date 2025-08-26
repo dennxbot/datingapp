@@ -7,10 +7,7 @@ export default defineConfig({
   publicDir: '../public-assets',
   build: {
     outDir: '../dist',
-    emptyOutDir: true,
-    rollupOptions: {
-      input: 'src/index.html'
-    }
+    emptyOutDir: true
   },
   server: {
     port: 5173,

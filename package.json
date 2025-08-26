@@ -10,7 +10,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node server.js",
     "client": "vite",
-    "build": "vite build",
+    "build": "node build.js",
     "preview": "vite preview",
     "deploy": "npm run build && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"

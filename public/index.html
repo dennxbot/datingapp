@@ -92,6 +92,47 @@
         </div>
     </div>
 
+    <!-- Context Menu for Messages -->
+    <div id="message-context-menu" class="context-menu hidden">
+        <!-- Emoji Reactions Row -->
+        <div class="emoji-reactions-row">
+            <button class="emoji-btn" data-emoji="❤️">❤️</button>
+            <button class="emoji-btn" data-emoji="😂">😂</button>
+            <button class="emoji-btn" data-emoji="😮">😮</button>
+            <button class="emoji-btn" data-emoji="😢">😢</button>
+            <button class="emoji-btn" data-emoji="😡">😡</button>
+            <button class="emoji-btn" data-emoji="👍">👍</button>
+            <button class="more-emojis-btn">+</button>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="context-actions">
+            <button id="ctx-edit" class="context-action-btn">
+                <span class="action-icon">✏️</span>
+                <span class="action-text">Edit</span>
+            </button>
+            <button id="ctx-reply" class="context-action-btn">
+                <span class="action-icon">↩️</span>
+                <span class="action-text">Reply</span>
+            </button>
+            <button id="ctx-copy" class="context-action-btn">
+                <span class="action-icon">📋</span>
+                <span class="action-text">Copy</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Reply Preview Banner -->
+    <div id="reply-banner" class="reply-banner hidden">
+        <div class="reply-content">
+            <div class="reply-header">
+                <span class="reply-to">Replying to <span id="reply-username"></span></span>
+                <button id="cancel-reply" class="cancel-reply">✕</button>
+            </div>
+            <div id="reply-message-preview" class="reply-message-preview"></div>
+        </div>
+    </div>
+
     <!-- Socket.IO Client Library -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="app.js"></script>

@@ -180,7 +180,6 @@ const handleReaction = (emoji) => {
 }
 
 const handleReply = () => {
-  console.log('handleReply called with message:', props.message)
   emit('reply-to-message', {
     messageId: props.message.id,
     message: props.message

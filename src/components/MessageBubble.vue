@@ -107,7 +107,7 @@ const props = defineProps({
   currentUsername: String
 })
 
-const emit = defineEmits(['add-reaction', 'edit-message'])
+const emit = defineEmits(['add-reaction', 'edit-message', 'reply-to-message'])
 
 const isEditing = ref(false)
 const editText = ref('')
@@ -180,8 +180,10 @@ const handleReaction = (emoji) => {
 }
 
 const handleReply = () => {
-  // This would emit a reply event to parent
-  console.log('Reply to message:', props.message.id)
+  emit('reply-to-message', {
+    messageId: props.message.id,
+    message: props.message
+  })
   hideContextMenu()
 }
 

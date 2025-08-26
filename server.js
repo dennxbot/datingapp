@@ -11,14 +11,29 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
+// API routes (must come before static file serving)
+app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok', environment: process.env.NODE_ENV || 'development' });
+});
+
 // Serve static files based on environment
 if (process.env.NODE_ENV === 'production') {
     // In production, serve built Vue.js app
     app.use(express.static(join(__dirname, 'dist')));
+    
+    // Handle Vue.js routing (SPA fallback) - this must be LAST
+    app.get('*', (req, res) => {
+        res.sendFile(join(__dirname, 'dist', 'index.html'));
+    });
 } else {
     // In development, let Vite handle the frontend
     // This server only handles API and Socket.IO
     console.log('Running in development mode - Vite will handle frontend on port 5173');
+    
+    // In development, redirect root to Vite dev server for testing
+    app.get('/', (req, res) => {
+        res.redirect('http://localhost:5173');
+    });
 }
 
 // Data structures for managing users and matches
